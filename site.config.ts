@@ -10,16 +10,16 @@ export default siteConfig({
 
   // basic site info (required)
   name: 'Andras Hejj',
-  domain: 'null',
+  domain: 'andrashejj.com',
   author: 'Andras Hejj',
 
   // open graph metadata (optional)
   description: 'Andras Hejj - thoughts, ideas, and more',
 
   // social usernames (optional)
-  // twitter: 'andrasnobank',
-  // github: 'andrasnobank',
-  // linkedin: 'andras-hejj-70a18764',
+  twitter: 'andrasnobank',
+  github: 'andrasnobank',
+  linkedin: 'andras-hejj-70a18764',
   // mastodon: '#', // optional mastodon profile URL, provides link verification
   // newsletter: '#', // optional newsletter URL
   // youtube: '#', // optional youtube channel name or `channel/UCGbXXXXXXXXXXXXXXXXXXXXXX`
@@ -50,16 +50,12 @@ export default siteConfig({
 
   // whether to use the default notion navigation style or a custom one with links to
   // important pages
-  navigationStyle: 'default'
-  // navigationStyle: 'custom',
-  // navigationLinks: [
-  //   {
-  //     title: 'About',
-  //     pageId: 'f1199d37579b41cbabfc0b5174f4256a'
-  //   },
-  //   {
-  //     title: 'Contact',
-  //     pageId: '6a29ebcb935a4f0689fe661ab5f3b8d1'
-  //   }
-  // ]
+  // navigationStyle: 'default'
+  navigationStyle: 'custom',
+  navigationLinks: [
+    {
+      title: 'Contact',
+      pageId: 'contact-22d541193a584477bc8cd9a4ceb4fc54'
+    }
+  ]
 })
