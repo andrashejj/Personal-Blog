@@ -4,6 +4,7 @@ import { ImageResponse } from '@vercel/og'
 
 import { api, apiHost, rootNotionPageId } from '@/lib/config'
 import { NotionPageInfo } from '@/lib/types'
+import React from 'react'
 
 const interRegularFontP = fetch(
   new URL('../../public/fonts/Inter-Regular.ttf', import.meta.url)
@@ -18,7 +19,10 @@ export const config = {
 }
 
 export default async function OGImage(req: NextRequest) {
-  console.log('Generating OG image')
+  React.useEffect(() => {
+    console.log('Generating OG image')
+  }, [])
+
   const { searchParams } = new URL(req.url)
   const pageId = searchParams.get('id') || rootNotionPageId
   if (!pageId) {
