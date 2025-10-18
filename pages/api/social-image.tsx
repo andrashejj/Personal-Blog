@@ -1,4 +1,3 @@
-import * as React from 'react'
 import { NextRequest } from 'next/server'
 
 import { ImageResponse } from '@vercel/og'
@@ -19,6 +18,7 @@ export const config = {
 }
 
 export default async function OGImage(req: NextRequest) {
+  console.log('Generating OG image')
   const { searchParams } = new URL(req.url)
   const pageId = searchParams.get('id') || rootNotionPageId
   if (!pageId) {

@@ -2,7 +2,7 @@ import { siteConfig } from './lib/site-config'
 
 export default siteConfig({
   // the site's root Notion page (required)
-  rootNotionPageId: 'Hi-4771e02c08084d94a5d03ca26cd42af8',
+  rootNotionPageId: 'Hi-I-m-Andras-4771e02c08084d94a5d03ca26cd42af8',
 
   // if you want to restrict pages to a single notion workspace (optional)
   // (this should be a Notion ID; see the docs for how to extract this)
@@ -17,8 +17,8 @@ export default siteConfig({
   description: 'Andras Hejj - thoughts, ideas, and more',
 
   // social usernames (optional)
-  twitter: 'andrasnobank',
-  github: 'andrasnobank',
+  twitter: 'andrashejj',
+  github: 'andrashejj',
   linkedin: 'andras-hejj-70a18764',
   // mastodon: '#', // optional mastodon profile URL, provides link verification
   // newsletter: '#', // optional newsletter URL
@@ -36,7 +36,7 @@ export default siteConfig({
   // whether or not redis is enabled for caching generated preview images (optional)
   // NOTE: if you enable redis, you need to set the `REDIS_HOST` and `REDIS_PASSWORD`
   // environment variables. see the readme for more info
-  isRedisEnabled: true,
+  isRedisEnabled: false,
 
   // map of notion page IDs to URL paths (optional)
   // any pages defined here will override their default URL paths
