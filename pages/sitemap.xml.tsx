@@ -17,11 +17,8 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
 
   const siteMap = await getSiteMap()
 
-  // cache for up to 8 hours
-  res.setHeader(
-    'Cache-Control',
-    'public, max-age=28800, stale-while-revalidate=28800'
-  )
+  // do not cache sitemap so changes in Notion show up immediately
+  res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate')
   res.setHeader('Content-Type', 'text/xml')
   res.write(createSitemap(siteMap))
   res.end()

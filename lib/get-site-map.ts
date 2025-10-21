@@ -1,11 +1,10 @@
 import { getAllPagesInSpace } from 'notion-utils'
-import pMemoize from 'p-memoize'
 
 import * as config from './config'
-import * as types from './types'
 import { includeNotionIdInUrls } from './config'
 import { getCanonicalPageId } from './get-canonical-page-id'
 import { notion } from './notion-api'
+import * as types from './types'
 
 const uuid = !!includeNotionIdInUrls
 
@@ -21,9 +20,10 @@ export async function getSiteMap(): Promise<types.SiteMap> {
   } as types.SiteMap
 }
 
-const getAllPages = pMemoize(getAllPagesImpl, {
-  cacheKey: (...args) => JSON.stringify(args)
-})
+// NOTE: previously this used pMemoize to cache the sitemap in-process.
+// That caused stale data to be served while the server process remained warm.
+// To ensure we always fetch the latest from Notion, don't memoize here.
+const getAllPages = getAllPagesImpl
 
 async function getAllPagesImpl(
   rootNotionPageId: string,

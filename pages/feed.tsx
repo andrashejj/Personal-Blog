@@ -24,15 +24,13 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
   }
 
   const siteMap = await getSiteMap()
-  const ttlMinutes = 24 * 60 // 24 hours
-  const ttlSeconds = ttlMinutes * 60
+  // previously used for long-lived caching; disabled to force fresh fetch
 
   const feed = new RSS({
     title: config.name,
     site_url: config.host,
     feed_url: `${config.host}/feed.xml`,
-    language: config.language,
-    ttl: ttlMinutes
+    language: config.language
   })
 
   for (const pagePath of Object.keys(siteMap.canonicalPageMap)) {
@@ -87,10 +85,8 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
 
   const feedText = feed.xml({ indent: true })
 
-  res.setHeader(
-    'Cache-Control',
-    `public, max-age=${ttlSeconds}, stale-while-revalidate=${ttlSeconds}`
-  )
+  // Do not cache this endpoint so we always return the latest content from Notion
+  res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate')
   res.setHeader('Content-Type', 'text/xml; charset=utf-8')
   res.write(feedText)
   res.end()
