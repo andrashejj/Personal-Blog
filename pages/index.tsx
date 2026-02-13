@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Image from 'next/image'
 
 import { PostCard } from '@/components/blog/PostCard'
 import { SeoHead } from '@/components/SeoHead'
@@ -14,18 +15,28 @@ export default function HomePage({ posts }: { posts: PostMeta[] }) {
     <SiteLayout>
       <SeoHead {...seo} />
       <section className='hero'>
-        <h1 className=''>Hi, I’m Andras</h1>
-        <p>Founder, software engineer, husband, dad.</p>
-        <p>
-          Made with 💕 in Budapest, 🌳 up in Switzerland, enjoying 🏄‍♂️ in Mauritius!
-        </p>
-        <div className='hero-actions'>
-          <Link href='/blog' className='primary-btn'>
-            Browse posts
-          </Link>
-          <Link href='/about' className='primary-btn'>
-            Read intro
-          </Link>
+        <Image
+          src='/images/posts/andras.png'
+          alt='Portrait of Andras'
+          className='hero-image'
+          width={120}
+          height={120}
+          priority
+        />
+        <div className='hero-content'>
+          <h1 className=''>Hi, I’m Andras</h1>
+          <p>Founder, software engineer, husband, dad.</p>
+          <p>
+            Made with 💕 in Budapest, 🌳 up in Switzerland, enjoying 🏄‍♂️ in Mauritius!
+          </p>
+          <div className='hero-actions'>
+            <Link href='/blog' className='primary-btn'>
+              Browse posts
+            </Link>
+            <Link href='/about' className='primary-btn'>
+              Read intro
+            </Link>
+          </div>
         </div>
       </section>
 
