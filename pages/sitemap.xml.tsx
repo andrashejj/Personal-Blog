@@ -1,54 +1,43 @@
 import type { GetServerSideProps } from 'next'
 
-import { host } from '@/lib/config'
-import { getSiteMap } from '@/lib/get-site-map'
-import type { SiteMap } from '@/lib/types'
+import { getAllPostMeta } from '@/lib/content/posts'
+import { site, staticPages } from '@/lib/site'
 
-export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
-  if (req.method !== 'GET') {
-    res.statusCode = 405
-    res.setHeader('Content-Type', 'application/json')
-    res.write(JSON.stringify({ error: 'method not allowed' }))
-    res.end()
-    return {
-      props: {}
-    }
-  }
+function buildSitemapXml() {
+  const posts = getAllPostMeta()
 
-  const siteMap = await getSiteMap()
+  const entries = [
+    ...staticPages.map((page) => ({
+      url: `${site.url}${page.path}`,
+      priority: page.priority,
+      lastmod: new Date().toISOString()
+    })),
+    ...posts.map((post) => ({
+      url: `${site.url}${post.routePath}`,
+      priority: 0.7,
+      lastmod: new Date(post.updated || post.date).toISOString()
+    }))
+  ]
 
-  // do not cache sitemap so changes in Notion show up immediately
-  res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate')
-  res.setHeader('Content-Type', 'text/xml')
-  res.write(createSitemap(siteMap))
-  res.end()
+  const urls = entries
+    .map(
+      (entry) => `<url>\n  <loc>${entry.url}</loc>\n  <lastmod>${entry.lastmod}</lastmod>\n  <priority>${entry.priority.toFixed(1)}</priority>\n</url>`
+    )
+    .join('\n')
 
-  return {
-    props: {}
-  }
+  return `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n</urlset>`
 }
 
-const createSitemap = (siteMap: SiteMap) =>
-  `<?xml version="1.0" encoding="UTF-8"?>
-  <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-    <url>
-      <loc>${host}</loc>
-    </url>
+export default function Sitemap() {
+  return null
+}
 
-    <url>
-      <loc>${host}/</loc>
-    </url>
+export const getServerSideProps: GetServerSideProps = async ({ res }) => {
+  const xml = buildSitemapXml()
+  res.setHeader('Content-Type', 'application/xml; charset=utf-8')
+  res.setHeader('Cache-Control', 'public, s-maxage=600, stale-while-revalidate=1200')
+  res.write(xml)
+  res.end()
 
-    ${Object.keys(siteMap.canonicalPageMap)
-      .map((canonicalPagePath) =>
-        `
-          <url>
-            <loc>${host}/${canonicalPagePath}</loc>
-          </url>
-        `.trim()
-      )
-      .join('')}
-  </urlset>
-`
-
-export default () => null
+  return { props: {} }
+}

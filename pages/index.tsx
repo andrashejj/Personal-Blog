@@ -1,23 +1,54 @@
-import * as React from 'react'
+import Link from 'next/link'
 
-import { NotionPage } from '@/components/NotionPage'
-import { domain } from '@/lib/config'
-import { resolveNotionPage } from '@/lib/resolve-notion-page'
+import { PostCard } from '@/components/blog/PostCard'
+import { SeoHead } from '@/components/SeoHead'
+import { SiteLayout } from '@/components/layout/SiteLayout'
+import { buildSeo } from '@/lib/content/seo'
+import { getAllPostMeta } from '@/lib/content/posts'
+import type { PostMeta } from '@/lib/content/types'
 
-export const getStaticProps = async () => {
-  try {
-    const props = await resolveNotionPage(domain)
+export default function HomePage({ posts }: { posts: PostMeta[] }) {
+  const seo = buildSeo({ path: '/' })
 
-    return { props, revalidate: 10 }
-  } catch (err) {
-    console.error('page error', domain, err)
+  return (
+    <SiteLayout>
+      <SeoHead {...seo} />
+      <section className='hero'>
+        <h1 className=''>Hi, I’m Andras</h1>
+        <p>Founder, software engineer, husband, dad.</p>
+        <p>
+          Made with 💕 in Budapest, 🌳 up in Switzerland, enjoying 🏄‍♂️ in Mauritius!
+        </p>
+        <div className='hero-actions'>
+          <Link href='/blog' className='primary-btn'>
+            Browse posts
+          </Link>
+          <Link href='/about' className='primary-btn'>
+            Read intro
+          </Link>
+        </div>
+      </section>
 
-    // we don't want to publish the error version of this page, so
-    // let next.js know explicitly that incremental SSG failed
-    throw err
-  }
+      <section>
+        <div className='section-head'>
+          <h2>Latest posts</h2>
+          <Link href='/blog'>All posts</Link>
+        </div>
+
+        <div className='post-grid'>
+          {posts.slice(0, 6).map((post) => (
+            <PostCard key={post.routePath} post={post} />
+          ))}
+        </div>
+      </section>
+    </SiteLayout>
+  )
 }
 
-export default function NotionDomainPage(props) {
-  return <NotionPage {...props} />
+export function getStaticProps() {
+  return {
+    props: {
+      posts: getAllPostMeta()
+    }
+  }
 }
